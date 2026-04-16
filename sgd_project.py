@@ -234,7 +234,7 @@ def make_plots(results: list[dict]) -> None:
         rows.sort(key=lambda r: r["n"])
         for_plot[sigma] = rows
 
-    # Plot 1: excess risk vs n
+    # -------- Plot 1: Excess Risk --------
     plt.figure(figsize=(8, 5))
     for sigma in SIGMAS:
         rows = for_plot[sigma]
@@ -250,9 +250,8 @@ def make_plots(results: list[dict]) -> None:
     plt.grid(True)
     plt.tight_layout()
     plt.savefig("results/excess_risk_plot.png", dpi=300)
-    plt.show()
 
-    # Plot 2: classification error vs n
+    # -------- Plot 2: Classification Error --------
     plt.figure(figsize=(8, 5))
     for sigma in SIGMAS:
         rows = for_plot[sigma]
@@ -268,8 +267,10 @@ def make_plots(results: list[dict]) -> None:
     plt.grid(True)
     plt.tight_layout()
     plt.savefig("results/classification_error_plot.png", dpi=300)
-    plt.show()
 
+    # 🔥 Show BOTH plots at the end
+    plt.show()
+    
 
 # =========================
 # Main
