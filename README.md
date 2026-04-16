@@ -1,187 +1,89 @@
-Stochastic Gradient Descent Project
-Overview
+# SGD Project - ML5523
 
-This project implements Projected Stochastic Gradient Descent (SGD) for logistic regression and evaluates its performance under varying training set sizes and noise levels.
+## Overview
+This project implements **Projected Stochastic Gradient Descent (SGD)** for logistic regression and evaluates its performance under varying training set sizes and noise levels.
 
 The goal is to study how SGD behaves in practice and compare empirical results with theoretical expectations from convex learning.
 
-Problem Setup
-Feature dimension: d = 4
-Parameter dimension: 5 (includes bias)
-Feature space: unit ball in R
-4
-Parameter space: unit ball in R
-5
-Loss Function
+## Problem Setup
 
-Logistic loss:
+- Feature dimension: `d = 4`
+- Parameter dimension: `5` (includes bias)
+- Feature space: unit ball in `R^4`
+- Parameter space: unit ball in `R^5`
 
-ℓ(w,(x,y))=log(1+exp(−y⟨w,
-x
-~
-⟩))
+### Logistic Loss
+The loss function is:
 
-where 
-x
-~
-=(x,1)
+`l(w, (x, y)) = log(1 + exp(-y <w, x_tilde>))`
 
-Algorithm
+where:
 
-We implement Projected Stochastic Gradient Descent:
+- `x_tilde = (x, 1)`
+- `y in {-1, +1}`
 
-Initialize w
-1
-	​
+## Algorithm
 
-=0
-For each iteration t:
-Compute stochastic gradient using one example
+We implement **Projected Stochastic Gradient Descent**:
 
-Update:
+1. Initialize `w_1 = 0`
+2. For each iteration `t`:
+   - compute the stochastic gradient using one training example
+   - update the parameter vector
+   - project the updated vector back onto the unit ball
+3. Use step size:
 
-w
-t+1/2
-	​
+`eta_t = 1 / sqrt(t)`
 
-=w
-t
-	​
+The final predictor is the **average of the iterates**.
 
-−η
-t
-	​
+## Data Generation
 
-∇ℓ(w
-t
-	​
+Each example is generated as follows:
 
-)
+- choose `y` uniformly from `{-1, +1}`
+- if `y = -1`, sample from a Gaussian centered at `(-1/4, -1/4, -1/4, -1/4)`
+- if `y = +1`, sample from a Gaussian centered at `(1/4, 1/4, 1/4, 1/4)`
+- project the sampled vector onto the unit ball to obtain `x`
 
-Project:
-
-w
-t+1
-	​
-
-=Π
-C
-	​
-
-(w
-t+1/2
-	​
-
-)
-Step size:
-η
-t
-	​
-
-=
-t
-	​
-
-1
-	​
-
-
-The final predictor is the average of iterates.
-
-Data Generation
-
-Each example is generated as:
-
-y∈{−1,+1} uniformly
-If y=−1:
-u∼N(μ
-0
-	​
-
-,σ
-2
-I), where μ
-0
-	​
-
-=(−1/4,...,−1/4)
-If y=+1:
-u∼N(μ
-1
-	​
-
-,σ
-2
-I), where μ
-1
-	​
-
-=(1/4,...,1/4)
-
-Then project:
-
-x=Π
-X
-	​
-
-(u)
-Experiments
+## Experiments
 
 Parameters used:
 
-Noise levels:
-σ∈{0.2,0.4}
-Training sizes:
-n∈{50,100,500,1000}
-Test set size:
-N=400
-Trials per setting:
-30
+- `sigma in {0.2, 0.4}`
+- `n in {50, 100, 500, 1000}`
+- test set size `N = 400`
+- `30` trials per setting
 
 Metrics evaluated:
 
-Logistic loss
-Classification error
-Excess risk = mean − min
-Results
-Key Observations
-Increasing n reduces excess risk and classification error
-Higher noise (σ=0.4) leads to worse performance
-Variance across trials decreases with larger datasets
-Plots
-Excess Risk vs Training Size
+- logistic loss
+- classification error
+- excess risk = `mean - min`
 
-Classification Error vs Training Size
+## Results
 
-Project Structure
-sgd-project/
-│
-├── sgd_project.py        # main implementation
-├── results/              # plots
+### Key observations
+- Increasing `n` reduces excess risk and classification error
+- Higher noise (`sigma = 0.4`) leads to worse performance
+- Variance across trials decreases as training size increases
+
+## Plots
+
+### Excess Risk vs Training Size
+![Excess Risk](results/excess_risk_plot.png)
+
+### Classification Error vs Training Size
+![Classification Error](results/classification_error_plot.png)
+
+## Project Structure
+
+```text
+SGD-Project-ML5523/
+├── results/
 │   ├── excess_risk_plot.png
-│   ├── classification_error_plot.png
+│   └── classification_error_plot.png
+├── .gitignore
 ├── README.md
-How to Run
-
-Install dependencies:
-
-pip install numpy matplotlib
-
-Run the project:
-
-python3 sgd_project.py
-
-Outputs:
-
-printed results table
-plots saved in results/
-Authors
-Shayan Manoharan
-Nihal Patil
-Notes
-
-This project demonstrates how SGD:
-
-scales to large datasets
-converges with noisy gradients
-is affected by data distribution noise
+├── report_notes.txt
+└── sgd_project.py
